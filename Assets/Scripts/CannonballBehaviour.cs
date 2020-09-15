@@ -2,17 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CannonballBehaviour : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public class CannonballBehavior : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public float forceOnFire = 300;
+
+    private bool _canFire = true;
+
+    private Rigidbody _rigidbody = null;
+
+    private void Awake()
     {
-        
+        _rigidbody = GetComponent<Rigidbody>();
+        _rigidbody.isKinematic = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.anyKeyDown && _canFire)
+        {
+            _rigidbody.isKinematic = false;
+            _rigidbody.AddForce(transform.forward * forceOnFire);
+            _canFire = false;
+        }
     }
 }
