@@ -1,6 +1,6 @@
 # PhyscisForGamesUnity
 
-This is just a simple build show all the core require ments need for this assessment.
+This is just a simple build showing all the core requirements needed for this assessment.
 
 Controls:
 
