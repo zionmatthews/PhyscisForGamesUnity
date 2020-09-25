@@ -9,7 +9,6 @@ public class SleepingColorBehavior : MonoBehaviour
     public Material asleepMaterial = null;
 
     private Rigidbody _rigidbody = null;
-    private Material _material = null;
 
     private bool wasAsleep = false;
 
@@ -30,12 +29,12 @@ public class SleepingColorBehavior : MonoBehaviour
         if (_rigidbody.IsSleeping() && !wasAsleep && asleepMaterial != null)
         {
             wasAsleep = true;
-            _material = asleepMaterial;
+            GetComponent<MeshRenderer>().material = asleepMaterial;
         }
         else if (!_rigidbody.IsSleeping() && wasAsleep && awakeMaterial != null)
         {
             wasAsleep = false;
-            _material = asleepMaterial;
+            GetComponent<MeshRenderer>().material = awakeMaterial;
         }
     }
 }

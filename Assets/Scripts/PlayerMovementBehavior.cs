@@ -9,11 +9,12 @@ public class PlayerMovementBehavior : MonoBehaviour
     private CharacterController _controller = null;
     private Animator _animator = null;
 
-    public float speed = 80.0f;
-    public float pushPower = 2.0f;
-    public float turnRate = 20.0f;
+    public float speed;
+    public float pushPower;
+    public float turnRate;
+    public float turn;
 
-    public bool tankControls = true;
+    private GameObject ragdoll;
 
     // Start is called before the first frame update
     void Start()
@@ -25,20 +26,38 @@ public class PlayerMovementBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        if (tankControls)
+        Vector3 movement = Vector3.zero;
+        
+        if( Input.GetKey(KeyCode.W))
         {
-            _controller.SimpleMove(transform.forward * movement.z * speed);
-            transform.Rotate(transform.up, movement.x * turnRate);
+            _animator.SetInteger("condition", 1);
+            movement = new Vector3(0, 0, 1);
+            movement *= speed;
+            movement = transform.TransformDirection(movement);
         }
-        else
+        if (Input.GetKeyUp(KeyCode.W))
         {
-            _controller.SimpleMove(movement);
-            if (movement.magnitude > 0)
-                transform.forward = movement.normalized;
+            _animator.SetInteger("condition", 0);
+            movement = new Vector3(0, 0, 0);
         }
-        //Animate based on movement
-        _animator.SetFloat("Speed", movement.z * speed * Time.deltaTime);
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            _animator.SetInteger("condition", 1);
+            movement = new Vector3(0, 0, -1);
+            movement *= speed;
+            movement = transform.TransformDirection(movement);
+        }
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            _animator.SetInteger("condition", 0);
+            movement = new Vector3(0, 0, 0);
+        }
+
+        turn += Input.GetAxis("Horizontal") * turnRate * Time.deltaTime;
+        transform.eulerAngles = new Vector3(0, turn, 0);
+
+        _controller.Move(movement * Time.deltaTime);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -52,4 +71,6 @@ public class PlayerMovementBehavior : MonoBehaviour
         Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
         otherRB.AddForceAtPosition(pushDirection * pushPower, hit.point);
     }
+
+   
 }
