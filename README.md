@@ -1,4 +1,4 @@
-# PhyscisForGamesUnity
+# PhysicsForGamesUnity
 
 This is just a simple build showing all the core requirements needed for this assessment.
 
